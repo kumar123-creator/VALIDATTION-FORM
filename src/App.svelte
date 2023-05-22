@@ -81,9 +81,16 @@
       {/if}
     </div>
     
+ <div class="container mt-5">
+  <form on:submit|preventDefault={handleSubmit}>
     <div class="form-group">
-      <label for="surname">Surname:</label>
-      <input type="text" id="surname" class="form-control" bind:value={surname} />
+      <label for="surname">SurName</label>
+      <input
+        type="text"
+        class="form-control"
+        id="surname"
+        bind:value={formData.surname}
+      />
       {#if errors.surname}
         <p class="error">{errors.surname}</p>
       {/if}
