@@ -79,6 +79,7 @@
       {#if errors.firstname}
         <p class="error">{errors.firstname}</p>
       {/if}
+      </form>
     </div>
     
  <div class="container mt-5">
@@ -94,6 +95,7 @@
       {#if errors.surname}
         <p class="error">{errors.surname}</p>
       {/if}
+      </form>
     </div>
 
     <div class="form-group">
