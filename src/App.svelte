@@ -1,139 +1,132 @@
 
 <h1>DETAILS</h1>
 <script>
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte';
 
-  let formData = {
-    firstname: "",
-    surname:"",
-    email: "",
-    password: "",
-    mobile:""
-  };
+  let firstName = '';
+  let surname = '';
+  let email = '';
+  let password = '';
+  let mobile = '';
 
-  let errors = {};
+  let firstNameError = '';
+  let surnameError = '';
+  let emailError = '';
+  let passwordError = '';
+  let mobileError = '';
 
-  const validateForm = () => {
-    errors = {};
+  function validateForm() {
+    // Reset errors
+    firstNameError = '';
+    surnameError = '';
+    emailError = '';
+    passwordError = '';
+    mobileError = '';
 
-    if (!formData.firstname) {
-      errors.firstname = "FirstName is required";
+    let isValid = true;
+
+    // Validate First Name
+    if (!firstName) {
+      firstNameError = 'First Name is required.';
+      isValid = false;
+    } else if (firstName.length > 28) {
+      firstNameError = 'First Name must be less than 29 characters.';
+      isValid = false;
     }
-    if (!formData.surname) {
-      errors.surname = "SurName is required";
+
+    // Validate Surname
+    if (!surname) {
+      surnameError = 'Surname is required.';
+      isValid = false;
+    } else if (surname.length > 28) {
+      surnameError = 'Surname must be less than 29 characters.';
+      isValid = false;
     }
 
-    if (!formData.email) {
-      errors.email = "Email is required";
-    } else if (!isValidEmail(formData.email)) {
-      errors.email = "Invalid email format";
-    }
-
-    if (!formData.password) {
-      errors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters long";
-    }
-     if (!formData.mobile) {
-      errors.mobile = "Mobile is required";
-    }
-  };
-
-  const isValidEmail = (email) => {
-    // Regular expression to validate email format
+    // Validate Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleSubmit = () => {
-    validateForm();
-
-    if (Object.keys(errors).length === 0) {
-      // Form submission logic goes here
-      console.log("Form submitted successfully");
+    if (!email) {
+      emailError = 'Email is required.';
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
+      emailError = 'Invalid email format.';
+      isValid = false;
     }
-  };
 
+    // Validate Password
+    const passwordRegex = /^(?=.*[0-9a-zA-Z])(?=.*[!@#$%^&*])[0-9a-zA-Z!@#$%^&*]{6,15}$/;
+    if (!password) {
+      passwordError = 'Password is required.';
+      isValid = false;
+    } else if (!passwordRegex.test(password)) {
+      passwordError = 'Password must contain at least one alphanumeric character and one special character. Password length should be between 6 and 15 characters.';
+      isValid = false;
+    }
+
+    // Validate Mobile
+    const mobileRegex = /^(\+)?\d+$/;
+    if (!mobile) {
+      mobileError = 'Mobile is required.';
+      isValid = false;
+    } else if (!mobileRegex.test(mobile)) {
+      mobileError = 'Invalid mobile number.';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (validateForm()) {
+      // Submit the form
+      console.log('Form submitted successfully!');
+    }
+  }
+
+  // Optional: Initialize form data or perform other actions on mount
   onMount(() => {
-    // Validate the form on initial load
-    validateForm();
+    // Initialize form data if needed
   });
 </script>
 
 <style>
-  .error {
-    color: red;
-  }
+  /* Add Bootstrap or Tailwind CSS classes for styling */
 </style>
 
-<div class="container mt-5">
-  <form on:submit|preventDefault={handleSubmit}>
-    <div class="form-group">
-      <label for="firstname">FirstName</label>
-      <input
-        type="text"
-        class="form-control"
-        id="firstname"
-        bind:value={formData.firstname}
-      />
-      {#if errors.firstname}
-        <p class="error">{errors.firstname}</p>
-      {/if}
-      </form>
-    </div>
-    
- <div class="container mt-5">
-  <form on:submit|preventDefault={handleSubmit}>
-    <div class="form-group">
-      <label for="surname">SurName</label>
-      <input
-        type="text"
-        class="form-control"
-        id="surname"
-        bind:value={formData.surname}
-      />
-      {#if errors.surname}
-        <p class="error">{errors.surname}</p>
-      {/if}
-      </form>
-    </div>
+<form on:submit={handleSubmit}>
+  <div>
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" bind:value={firstName} />
+    {#if firstNameError}<p>{firstNameError}</p>{/if}
+  </div>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input
-        type="email"
-        class="form-control"
-        id="email"
-        bind:value={formData.email}
-      />
-      {#if errors.email}
-        <p class="error">{errors.email}</p>
-      {/if}
-    </div>
+  <div>
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" bind:value={surname} />
+    {#if surnameError}<p>{surnameError}</p>{/if}
+  </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input
-        type="password"
-        class="form-control"
-        id="password"
-        bind:value={formData.password}
-      />
-      {#if errors.password}
-        <p class="error">{errors.password}</p>
-      {/if}
-    </div>
-    
-     <div class="form-group">
-      <label for="mobile">Mobile:</label>
-      <input type="text" id="mobile" class="form-control" bind:value={mobile} />
-      {#if errors.mobile}
-        <p class="error">{errors.mobile}</p>
-      {/if}
-    </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" bind:value={email} />
+    {#if emailError}<p>{emailError}</p>{/if}
+  </div>
+  
+    <div>
+    <label for="password">password:</label>
+    <input type="text" id="password" bind:value={password} />
+      {#if passwordError}<p>{passwordError}</p>{/if}
+  </div>
 
-
-    <button type="submit" class="btn btn-primary">Submit</button>
+  <div>
+    <label for="mobile">Mobile:</label>
+    <input type="number" id="mobile" bind:value={mobile} />
+    {#if mobileError}<p>{mobileError}</p>{/if}
+   </div>
+ 
+ <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 
