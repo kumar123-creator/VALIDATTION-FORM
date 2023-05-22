@@ -1,5 +1,5 @@
 
-<h1>DETAILS</h1>
+<h1>FORM</h1>
 <script>
   import { onMount } from "svelte";
 
