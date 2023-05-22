@@ -4,9 +4,11 @@
   import { onMount } from "svelte";
 
   let formData = {
-    name: "",
+    firstname: "",
+    surname:"",
     email: "",
     password: "",
+    mobile:""
   };
 
   let errors = {};
@@ -14,8 +16,11 @@
   const validateForm = () => {
     errors = {};
 
-    if (!formData.name) {
-      errors.name = "Name is required";
+    if (!formData.firstname) {
+      errors.firstname = "FirstName is required";
+    }
+    if (!formData.surname) {
+      errors.surname = "SurName is required";
     }
 
     if (!formData.email) {
@@ -28,6 +33,9 @@
       errors.password = "Password is required";
     } else if (formData.password.length < 6) {
       errors.password = "Password must be at least 6 characters long";
+    }
+     if (!formData.mobile) {
+      errors.mobile = "Mobile is required";
     }
   };
 
@@ -61,15 +69,23 @@
 <div class="container mt-5">
   <form on:submit|preventDefault={handleSubmit}>
     <div class="form-group">
-      <label for="name">Name</label>
+      <label for="firstname">FirstName</label>
       <input
         type="text"
         class="form-control"
-        id="name"
-        bind:value={formData.name}
+        id="firstname"
+        bind:value={formData.firstname}
       />
-      {#if errors.name}
-        <p class="error">{errors.name}</p>
+      {#if errors.firstname}
+        <p class="error">{errors.firstname}</p>
+      {/if}
+    </div>
+    
+    <div class="form-group">
+      <label for="surname">Surname:</label>
+      <input type="text" id="surname" class="form-control" bind:value={surname} />
+      {#if errors.surname}
+        <p class="error">{errors.surname}</p>
       {/if}
     </div>
 
@@ -98,6 +114,15 @@
         <p class="error">{errors.password}</p>
       {/if}
     </div>
+    
+     <div class="form-group">
+      <label for="mobile">Mobile:</label>
+      <input type="text" id="mobile" class="form-control" bind:value={mobile} />
+      {#if errors.mobile}
+        <p class="error">{errors.mobile}</p>
+      {/if}
+    </div>
+
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
